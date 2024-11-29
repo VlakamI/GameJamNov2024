@@ -1,6 +1,9 @@
+using NUnit.Framework;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -12,10 +15,10 @@ public class PlayerScript : MonoBehaviour
     private float speedMultiplier = 15;
     private float jumpMultiplier = 50;
     private float horizontal;
-    private string[] fullColourList = { "Neutral", "Red", "Green", "Blue" };
-    private string[] colourList;
-    
-    
+    private List<string> fullColourList;
+    private List<string> colourList;
+
+
     //private void OnEnable()
     //{
     //    playerControls.Enable();
@@ -27,8 +30,9 @@ public class PlayerScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        colourList = new string[fullColourList.Length];
-        colourList[0] = "Neutral";
+        fullColourList = new List<string> { "Neutral", "Red", "Green", "Blue" };
+        colourList = new List<string>();
+        colourList.Add("Neutral");
     }
 
     // Update is called once per frame
@@ -90,6 +94,35 @@ public class PlayerScript : MonoBehaviour
         }
         return false;
     }
+    private void colourToggle(string colour)
+    {
+        for (int i = 1; i < colourList.Count; i++)
+        {
+            if (colour == colourList[i])
+            {
+                //Debug.Log("Found " + fullColourList[binding + 1]);
+                Transform parentRemove = GameObject.Find(colourList[i]).transform;
+                foreach (Transform j in parentRemove)
+                {
+                    j.GetComponent<Collider2D>().enabled = false;
+                    j.GetComponent<Renderer>().enabled = false;
+
+                }
+
+                colourList.RemoveAt(i);
+                return;
+            }
+        }
+        //Debug.Log("adding " + fullColourList[binding + 1]);
+        colourList.Add(colour);
+        Transform parentAdd = GameObject.Find(colour).transform;
+        foreach (Transform j in parentAdd)
+        {
+            j.GetComponent<Collider2D>().enabled = true;
+            j.GetComponent<Renderer>().enabled = true;
+
+        }
+    }
     public void Colour(InputAction.CallbackContext context)
     {
         //var binding = context.action.GetBindingForControl(context.control);
@@ -102,26 +135,18 @@ public class PlayerScript : MonoBehaviour
                 {
                     //Debug.Log("input 0");
 
-                    for(int i=0; i < colourList.Length; i++)
-                    {
-                        if(fullColourList[binding + 1] == colourList[i])
-                        {
-                            colourList[i] = "";
-                            break;
-                        }
-                    }
-                    
+                    colourToggle(fullColourList[binding + 1]);
                     break;
                 }
             case 1:
                 {
                     //Debug.Log("input 1");
-
+                    colourToggle(fullColourList[binding + 1]);
                     break;
                 }
             case 2:
                 {
-                    
+                    colourToggle(fullColourList[binding + 1]);
                     break;
                 }
         }
