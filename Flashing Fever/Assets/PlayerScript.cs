@@ -12,8 +12,10 @@ public class PlayerScript : MonoBehaviour
     private float speedMultiplier = 15;
     private float jumpMultiplier = 50;
     private float horizontal;
-    private string[] colourList = { "Neutral", "Red" };
     private string[] fullColourList = { "Neutral", "Red", "Green", "Blue" };
+    private string[] colourList;
+    
+    
     //private void OnEnable()
     //{
     //    playerControls.Enable();
@@ -25,7 +27,8 @@ public class PlayerScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        colourList = new string[fullColourList.Length];
+        colourList[0] = "Neutral";
     }
 
     // Update is called once per frame
@@ -86,5 +89,41 @@ public class PlayerScript : MonoBehaviour
             }
         }
         return false;
+    }
+    public void Colour(InputAction.CallbackContext context)
+    {
+        //var binding = context.action.GetBindingForControl(context.control);
+        int binding = context.action.GetBindingIndexForControl(context.control);
+
+        switch (binding)
+        {
+
+            case 0:
+                {
+                    //Debug.Log("input 0");
+
+                    for(int i=0; i < colourList.Length; i++)
+                    {
+                        if(fullColourList[binding + 1] == colourList[i])
+                        {
+                            colourList[i] = "";
+                            break;
+                        }
+                    }
+                    
+                    break;
+                }
+            case 1:
+                {
+                    //Debug.Log("input 1");
+
+                    break;
+                }
+            case 2:
+                {
+                    
+                    break;
+                }
+        }
     }
 }
