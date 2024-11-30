@@ -1,4 +1,4 @@
-Shader "Custom/NewSurfaceShader"
+Shader "Custom/StencilObjectShader"
 {
     Properties
     {
@@ -9,16 +9,12 @@ Shader "Custom/NewSurfaceShader"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry-100"}
-        ColorMask 0
-        ZWrite off
+        Tags { "RenderType"="Opaque" }
         LOD 200
-
         Stencil{
             Ref 1
-            Pass replace
+            Comp equal 
             }
-
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
         #pragma surface surf Standard fullforwardshadows
