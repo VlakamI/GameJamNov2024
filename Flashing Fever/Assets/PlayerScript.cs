@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
+using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -33,12 +35,14 @@ public class PlayerScript : MonoBehaviour
         fullColourList = new List<string> { "Neutral", "Red", "Green", "Blue" };
         colourList = new List<string>();
         colourList.Add("Neutral");
+        colourList.Add("Red");
     }
 
     // Update is called once per frame
     void Update()
     {
         rb.linearVelocity = new Vector2(horizontal * speedMultiplier, rb.linearVelocity.y);
+        outOfBounds(-10);
         //moveDirection = playerControls.ReadValue<Vector2>();
 
     }
@@ -46,10 +50,17 @@ public class PlayerScript : MonoBehaviour
     {
         //rb.linearVelocity = new Vector2(moveDirection.x * speedMultiplier, moveDirection.y * speedMultiplier);
     }
+    private void outOfBounds(int ylevel)
+    {
+        if (this.transform.position.y < ylevel)
+        { 
+        this.transform.position = new Vector2(-2, -1);
+        }
+    }
     private bool IsGrounded()
     {
         //Debug.Log("check if grounded");
-        return Physics2D.OverlapCircle(groundCheck.position, 0.7f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, 0.8f, groundLayer);
     }
     public void Jump(InputAction.CallbackContext context)
     {
@@ -106,7 +117,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     j.GetComponent<Collider2D>().enabled = false;
                     j.GetComponent<Renderer>().enabled = false;
-
+                    j.GetComponent<ShadowCaster2D>().enabled = false;
                 }
 
                 colourList.RemoveAt(i);
@@ -120,7 +131,7 @@ public class PlayerScript : MonoBehaviour
         {
             j.GetComponent<Collider2D>().enabled = true;
             j.GetComponent<Renderer>().enabled = true;
-
+            j.GetComponent<ShadowCaster2D>().enabled = true;
         }
     }
     public void Colour(InputAction.CallbackContext context)
